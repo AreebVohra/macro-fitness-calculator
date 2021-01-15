@@ -66,16 +66,22 @@ export default class App extends Component {
         { label: 'moderately\nactive', description: 'Server, trainer, nurse\nMostly standing & moving', active: false },
         { label: 'Very\nactive', description: 'Construction worker, farmer\nMostly moving & lifting', active: false }
       ],
-      fitness_experience: [
+      fitnessExperience: [
         { label: 'Beginner', active: false },
         { label: 'Intermediate', active: true },
         { label: 'Advanced', active: false }
       ],
-      fitness_location: [
+      fitnessLocation: [
         { label: 'The Gym', active: true },
         { label: 'Home', active: false }
       ],
-      strength_level: [
+      strengthLevel: [
+        { label: 'Light', description: 'I can hold a conversation', active: true },
+        { label: 'Moderate', description: 'I am breathing hard', active: false },
+        { label: 'Difficult', description: 'Can\'t talk, busy sweating', active: false },
+        { label: 'Intense', description: 'I seriously might die', active: false }
+      ],
+      cardioLevel: [
         { label: 'Light', description: 'I can hold a conversation', active: true },
         { label: 'Moderate', description: 'I am breathing hard', active: false },
         { label: 'Difficult', description: 'Can\'t talk, busy sweating', active: false },
@@ -97,29 +103,37 @@ export default class App extends Component {
   }
 
   selectFitnessExperience = async (index) => {
-    let a = this.state.fitness_experience;
+    let a = this.state.fitnessExperience;
     a[0]['active'] = false; a[1]['active'] = false; a[2]['active'] = false;
     a[index]['active'] = true;
-    await this.setState({ fitness_experience: a })
+    await this.setState({ fitnessExperience: a })
   }
 
   selectFitnessLocation = async (index) => {
-    let a = this.state.fitness_location;
+    let a = this.state.fitnessLocation;
     a[0]['active'] = false; a[1]['active'] = false;
     a[index]['active'] = true;
-    await this.setState({ fitness_location: a })
+    await this.setState({ fitnessLocation: a })
   }
 
   selectStrengthLevel = async (index) => {
-    let a = this.state.strength_level;
+    let a = this.state.strengthLevel;
     a[0]['active'] = false; a[1]['active'] = false;
     a[2]['active'] = false; a[3]['active'] = false;
     a[index]['active'] = true;
-    await this.setState({ strength_level: a })
+    await this.setState({ strengthLevel: a })
+  }
+
+  selectCardioLevel = async (index) => {
+    let a = this.state.cardioLevel;
+    a[0]['active'] = false; a[1]['active'] = false;
+    a[2]['active'] = false; a[3]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ cardioLevel: a })
   }
 
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitness_experience, fitness_location, strength_level } = this.state
+    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitnessExperience, fitnessLocation, strengthLevel, cardioLevel } = this.state
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -269,9 +283,9 @@ export default class App extends Component {
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
-                    fitness_experience.map((item, index) => (
+                    fitnessExperience.map((item, index) => (
                       <div style={{ margin: 5, width: 'calc(23.3333% - 10px)', display: 'inline-block' }}>
-                        <button onClick={() => this.selectFitnessExperience(index)} style={{ width: '100%' }} id={'fitness_experience' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="15" kfocus="false">
+                        <button onClick={() => this.selectFitnessExperience(index)} style={{ width: '100%' }} id={'fitnessExperience' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="15" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
                           </div>
@@ -286,9 +300,9 @@ export default class App extends Component {
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
-                    fitness_location.map((item, index) => (
+                    fitnessLocation.map((item, index) => (
                       <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
-                        <button onClick={() => this.selectFitnessLocation(index)} style={{ width: '100%' }} id={'fitness_location' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="19" kfocus="false">
+                        <button onClick={() => this.selectFitnessLocation(index)} style={{ width: '100%' }} id={'fitnessLocation' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="19" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
                           </div>
@@ -328,9 +342,9 @@ export default class App extends Component {
                     <div className="">
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         {
-                          strength_level.map((item, index) => (
-                            <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                              <button onClick={() => this.selectStrengthLevel(index)} style={{ width: '100%' }} id={'strength_level' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
+                          strengthLevel.map((item, index) => (
+                            <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                              <button onClick={() => this.selectStrengthLevel(index)} style={{ width: '100%' }} id={'strengthLevel' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
                                 <div className="cf-button-text-wrapper">
                                   <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
                                   <div className="cf-center-desc">
@@ -374,46 +388,20 @@ export default class App extends Component {
                     <div tabIndex="-1" className="cf-margin"></div>
                     <div className="">
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="cardio_level0" className="cf-button selected" findex="28" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label-selected">Light</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc-selected">I can hold a conversation</div>
-                              </div>
+                        {
+                          cardioLevel.map((item, index) => (
+                            <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                              <button onClick={() => this.selectCardioLevel(index)} style={{ width: '100%' }} id={'cardioLevel' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
+                                <div className="cf-button-text-wrapper">
+                                  <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
+                                  <div className="cf-center-desc">
+                                    <div className={item.active === true ? 'cf-button-desc-selected' : 'cf-button-desc'}>{item.description}</div>
+                                  </div>
+                                </div>
+                              </button>
                             </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="cardio_level1" className="cf-button" findex="29" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Moderate</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">I am breathing hard</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="cardio_level2" className="cf-button" findex="30" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Difficult</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">Can't talk, busy sweating</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="cardio_level3" className="cf-button" findex="31" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Intense</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">I seriously might die</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
+                          ))
+                        }
                       </div>
                     </div>
                   </div>
