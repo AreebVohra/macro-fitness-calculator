@@ -1712,12 +1712,14 @@ h4.box-desc {
 }
 
 input.cf-text-input:-webkit-autofill, input.cf-text-input:-webkit-autofill:active, input.cf-text-input:-webkit-autofill:focus, input.cf-text-input:-webkit-autofill:hover {
+  box-shadow: 0 0 0 1000px #fff inset;
   -webkit-box-shadow: 0 0 0 1000px #fff inset;
   -webkit-text-fill-color: #9bcd2d;
   -webkit-text-fill-color: var(--cfgreen)
 }
 
 input.cf-text-input-invalid:-webkit-autofill, input.cf-text-input-invalid:-webkit-autofill:active, input.cf-text-input-invalid:-webkit-autofill:focus, input.cf-text-input-invalid:-webkit-autofill:hover {
+  box-shadow: 0 0 0 1000px #fff inset;
   -webkit-box-shadow: 0 0 0 1000px #fff inset;
   -webkit-text-fill-color: #eb4722
 }

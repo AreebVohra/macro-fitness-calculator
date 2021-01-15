@@ -74,6 +74,12 @@ export default class App extends Component {
       fitness_location: [
         { label: 'The Gym', active: true },
         { label: 'Home', active: false }
+      ],
+      strength_level: [
+        { label: 'Light', description: 'I can hold a conversation', active: true },
+        { label: 'Moderate', description: 'I am breathing hard', active: false },
+        { label: 'Difficult', description: 'Can\'t talk, busy sweating', active: false },
+        { label: 'Intense', description: 'I seriously might die', active: false }
       ]
     }
   }
@@ -104,8 +110,16 @@ export default class App extends Component {
     await this.setState({ fitness_location: a })
   }
 
+  selectStrengthLevel = async (index) => {
+    let a = this.state.strength_level;
+    a[0]['active'] = false; a[1]['active'] = false;
+    a[2]['active'] = false; a[3]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ strength_level: a })
+  }
+
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitness_experience, fitness_location } = this.state
+    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitness_experience, fitness_location, strength_level } = this.state
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -313,46 +327,20 @@ export default class App extends Component {
                     <div tabIndex="-1" className="cf-margin"></div>
                     <div className="">
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="strength_level0" className="cf-button selected" findex="22" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label-selected">Light</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc-selected">I can hold a conversation</div>
-                              </div>
+                        {
+                          strength_level.map((item, index) => (
+                            <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                              <button onClick={() => this.selectStrengthLevel(index)} style={{ width: '100%' }} id={'strength_level' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
+                                <div className="cf-button-text-wrapper">
+                                  <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
+                                  <div className="cf-center-desc">
+                                    <div className={item.active === true ? 'cf-button-desc-selected' : 'cf-button-desc'}>{item.description}</div>
+                                  </div>
+                                </div>
+                              </button>
                             </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="strength_level1" className="cf-button" findex="23" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Moderate</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">I am breathing hard</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="strength_level2" className="cf-button" findex="24" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Difficult</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">Can't talk, busy sweating</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
-                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                          <button style={{ width: '100%' }} id="strength_level3" className="cf-button" findex="25" kfocus="false">
-                            <div className="cf-button-text-wrapper">
-                              <div className="with-desc cf-button-label">Intense</div>
-                              <div className="cf-center-desc">
-                                <div className="cf-button-desc">I seriously might die</div>
-                              </div>
-                            </div>
-                          </button>
-                        </div>
+                          ))
+                        }
                       </div>
                     </div>
                   </div>
