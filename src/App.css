@@ -1746,3 +1746,19 @@ button:focus {
     font-size: 24px!important
   }
 }
+
+@media (min-width: 576px) {
+  .active-job-day-routine {
+    margin: 5px;
+    width: calc(100% - 10px);
+    display: inline-block;
+  }
+}
+
+@media (min-width: 768px) {
+  .active-job-day-routine {
+    margin: 5px;
+    width: calc(35% - 10px);
+    display: inline-block;
+  }
+}

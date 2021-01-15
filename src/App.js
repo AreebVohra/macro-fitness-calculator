@@ -61,26 +61,19 @@ export default class App extends Component {
       goalWeightInPounds: 305,
 
       activeJobDayRoutine: [
-        {
-          label: 'sedentary',
-          description: 'Desk job, work from home\nVery little activity',
-          active: true
-        },
-        {
-          label: 'lightly\nactive',
-          description: 'Teacher, host, usher\nSome standing & moving',
-          active: false
-        },
-        {
-          label: 'moderately\nactive',
-          description: 'Server, trainer, nurse\nMostly standing & moving',
-          active: false
-        },
-        {
-          label: 'Very\nactive',
-          description: 'Construction worker, farmer\nMostly moving & lifting',
-          active: false
-        }
+        { label: 'sedentary', description: 'Desk job, work from home\nVery little activity', active: true },
+        { label: 'lightly\nactive', description: 'Teacher, host, usher\nSome standing & moving', active: false },
+        { label: 'moderately\nactive', description: 'Server, trainer, nurse\nMostly standing & moving', active: false },
+        { label: 'Very\nactive', description: 'Construction worker, farmer\nMostly moving & lifting', active: false }
+      ],
+      fitness_experience: [
+        { label: 'Beginner', active: false },
+        { label: 'Intermediate', active: true },
+        { label: 'Advanced', active: false }
+      ],
+      fitness_location: [
+        { label: 'The Gym', active: true },
+        { label: 'Home', active: false }
       ]
     }
   }
@@ -97,8 +90,22 @@ export default class App extends Component {
     await this.setState({ activeJobDayRoutine: a })
   }
 
+  selectFitnessExperience = async (index) => {
+    let a = this.state.fitness_experience;
+    a[0]['active'] = false; a[1]['active'] = false; a[2]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ fitness_experience: a })
+  }
+
+  selectFitnessLocation = async (index) => {
+    let a = this.state.fitness_location;
+    a[0]['active'] = false; a[1]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ fitness_location: a })
+  }
+
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine } = this.state
+    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitness_experience, fitness_location } = this.state
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -219,8 +226,8 @@ export default class App extends Component {
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
                     activeJobDayRoutine.map((item, index) => (
-                      <div key={index} style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
-                        <button onClick={() => this.selectActiveJobRoutine(index)} style={{ width: '100%' }} id="daily_activity0" className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="11" kfocus="false">
+                      <div key={index} className="active-job-day-routine">
+                        <button onClick={() => this.selectActiveJobRoutine(index)} style={{ width: '100%' }} id={'daily_activity' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="11" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
                             <div className="cf-center-desc">
@@ -247,47 +254,34 @@ export default class App extends Component {
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="fitness_experience0" className="cf-button" findex="15" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Beginner</div>
+                  {
+                    fitness_experience.map((item, index) => (
+                      <div style={{ margin: 5, width: 'calc(23.3333% - 10px)', display: 'inline-block' }}>
+                        <button onClick={() => this.selectFitnessExperience(index)} style={{ width: '100%' }} id={'fitness_experience' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="15" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="fitness_experience1" className="cf-button selected" findex="16" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label-selected">Intermediate</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="fitness_experience2" className="cf-button" findex="17" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Advanced</div>
-                      </div>
-                    </button>
-                  </div>
+                    ))
+                  }
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I work out at...</div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="fitness_location0" className="cf-button selected" findex="18" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label-selected">The Gym</div>
+                  {
+                    fitness_location.map((item, index) => (
+                      <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                        <button onClick={() => this.selectFitnessLocation(index)} style={{ width: '100%' }} id={'fitness_location' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="19" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="fitness_location1" className="cf-button" findex="19" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Home</div>
-                      </div>
-                    </button>
-                  </div>
+                    ))
+                  }
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
