@@ -86,7 +86,16 @@ export default class App extends Component {
         { label: 'Moderate', description: 'I am breathing hard', active: false },
         { label: 'Difficult', description: 'Can\'t talk, busy sweating', active: false },
         { label: 'Intense', description: 'I seriously might die', active: false }
-      ]
+      ],
+      nutritionalPreference: [
+        { label: 'standard Western', active: true },
+        { label: 'Vegan', active: false },
+        { label: 'Vegetarian', active: false },
+        { label: 'Pescatarian', active: false },
+        { label: 'Pollotarian', active: false },
+        { label: 'Pesce-Pollotarian', active: false },
+      ],
+      nutritionalPrefLowCarb: false
     }
   }
 
@@ -132,8 +141,21 @@ export default class App extends Component {
     await this.setState({ cardioLevel: a })
   }
 
+  selectNutritionalPreference = async (index) => {
+    let a = this.state.nutritionalPreference
+    a[0]['active'] = false; a[1]['active'] = false; a[2]['active'] = false;
+    a[3]['active'] = false; a[4]['active'] = false; a[5]['active'] = false;
+    a[index]['active'] = true;
+
+    if (a[3]['active'] === true || a[4]['active'] === true || a[5]['active'] === true) {
+      await this.setState({ nutritionalPrefLowCarb: false })
+    }
+
+    await this.setState({ nutritionalPreference: a })
+  }
+
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitnessExperience, fitnessLocation, strengthLevel, cardioLevel } = this.state
+    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitnessExperience, fitnessLocation, strengthLevel, cardioLevel, nutritionalPreference, nutritionalPrefLowCarb } = this.state;
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -284,7 +306,7 @@ export default class App extends Component {
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
                     fitnessExperience.map((item, index) => (
-                      <div style={{ margin: 5, width: 'calc(23.3333% - 10px)', display: 'inline-block' }}>
+                      <div key={index} style={{ margin: 5, width: 'calc(23.3333% - 10px)', display: 'inline-block' }}>
                         <button onClick={() => this.selectFitnessExperience(index)} style={{ width: '100%' }} id={'fitnessExperience' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="15" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
@@ -301,7 +323,7 @@ export default class App extends Component {
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
                     fitnessLocation.map((item, index) => (
-                      <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                      <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
                         <button onClick={() => this.selectFitnessLocation(index)} style={{ width: '100%' }} id={'fitnessLocation' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="19" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
@@ -343,7 +365,7 @@ export default class App extends Component {
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         {
                           strengthLevel.map((item, index) => (
-                            <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                            <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
                               <button onClick={() => this.selectStrengthLevel(index)} style={{ width: '100%' }} id={'strengthLevel' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
                                 <div className="cf-button-text-wrapper">
                                   <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
@@ -390,7 +412,7 @@ export default class App extends Component {
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         {
                           cardioLevel.map((item, index) => (
-                            <div style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                            <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
                               <button onClick={() => this.selectCardioLevel(index)} style={{ width: '100%' }} id={'cardioLevel' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
                                 <div className="cf-button-text-wrapper">
                                   <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
@@ -420,55 +442,31 @@ export default class App extends Component {
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="quad-multi-container" style={{ margin: '0px auto' }}>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button selected" findex="32" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label-selected">Standard Western</div>
+
+                {
+                  nutritionalPreference.map((item, index) => (
+                    <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
+                      <button onClick={() => this.selectNutritionalPreference(index)} style={{ width: '100%' }} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="32" kfocus="false">
+                        <div className="cf-button-text-wrapper">
+                          <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
+                        </div>
+                      </button>
                     </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="33" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Vegan</div>
+                  ))
+                }
+
+                {
+                  (nutritionalPreference[0]['active'] === true || nutritionalPreference[1]['active'] === true || nutritionalPreference[2]['active'] === true)
+                    ? <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
+                      <button onClick={() => this.setState({ nutritionalPrefLowCarb: !nutritionalPrefLowCarb })} style={{ width: '100%' }} id="diet" className={nutritionalPrefLowCarb === true ? 'cf-button selected' : 'cf-button'} findex="38" kfocus="false">
+                        <div className="cf-button-text-wrapper">
+                          <div className={nutritionalPrefLowCarb === true ? 'cf-button-label-selected' : 'cf-button-label'}>Low Carb?</div>
+                        </div>
+                      </button>
                     </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="34" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Vegetarian</div>
-                    </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="35" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Pescatarian</div>
-                    </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="36" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Pollotarian</div>
-                    </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="37" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Pesce-Pollotarian</div>
-                    </div>
-                  </button>
-                </div>
-                <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                  <button style={{ width: '100%' }} id="diet" className="cf-button" findex="38" kfocus="false">
-                    <div className="cf-button-text-wrapper">
-                      <div className="cf-button-label">Low Carb?</div>
-                    </div>
-                  </button>
-                </div>
+                    : <div />
+                }
+
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
