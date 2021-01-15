@@ -51,12 +51,37 @@ export default class App extends Component {
       imperialMetric: false,
       age: 45,
       bodyFat: 28,
-      daysPerWeek: 3,
-      minutesPerDay: 60,
+      liftingDaysPerWeek: 3,
+      liftingMinutesPerDay: 60,
+      cardioDaysPerWeek: 3,
+      cardioMinutesPerDay: 60,
 
       heightInFeet: 66,
       currentWeightInPounds: 305,
       goalWeightInPounds: 305,
+
+      activeJobDayRoutine: [
+        {
+          label: 'sedentary',
+          description: 'Desk job, work from home\nVery little activity',
+          active: true
+        },
+        {
+          label: 'lightly\nactive',
+          description: 'Teacher, host, usher\nSome standing & moving',
+          active: false
+        },
+        {
+          label: 'moderately\nactive',
+          description: 'Server, trainer, nurse\nMostly standing & moving',
+          active: false
+        },
+        {
+          label: 'Very\nactive',
+          description: 'Construction worker, farmer\nMostly moving & lifting',
+          active: false
+        }
+      ]
     }
   }
 
@@ -64,8 +89,16 @@ export default class App extends Component {
 
   toggleimperialMetric = () => this.setState({ imperialMetric: !this.state.imperialMetric });
 
+  selectActiveJobRoutine = async (index) => {
+    let a = this.state.activeJobDayRoutine;
+    a[0]['active'] = false; a[1]['active'] = false;
+    a[2]['active'] = false; a[3]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ activeJobDayRoutine: a })
+  }
+
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, daysPerWeek, minutesPerDay } = this.state
+    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine } = this.state
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -73,8 +106,8 @@ export default class App extends Component {
             <div id="calculate-my-macros" className="cf-discoverSection" style={{ width: '100%', }}>
               <div style={{ display: 'none', }}></div>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%', }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">Discover Your Ideal Macros</h4>
@@ -83,18 +116,18 @@ export default class App extends Component {
                   </h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I am a</div>
               <div>
                 <div className="cf-button-container" style={{ display: 'inline-block' }}>
-                  <div tabindex="-1" className="cf-mask">
+                  <div tabIndex="-1" className="cf-mask">
                     <div className={gender === true ? 'cf-green-div-transition-gender' : 'cf-green-div-gender'}></div>
                   </div>
-                  <button onClick={this.toggleGender} tabindex="0" className={gender === true ? 'cf-Woman-b-transition slid-font' : 'cf-Woman-b slid-font'} findex="0" kfocus="false">Woman</button>
-                  <button onClick={this.toggleGender} tabindex="0" className={gender === true ? 'cf-Man-b-transition slid-font' : 'cf-Man-b slid-font'} findex="1" kfocus="false">Man</button>
+                  <button onClick={this.toggleGender} tabIndex="0" className={gender === true ? 'cf-Woman-b-transition slid-font' : 'cf-Woman-b slid-font'} findex="0" kfocus="false">Woman</button>
+                  <button onClick={this.toggleGender} tabIndex="0" className={gender === true ? 'cf-Man-b-transition slid-font' : 'cf-Man-b slid-font'} findex="1" kfocus="false">Man</button>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I am <font className="cfgreen">{age}</font> years young</div>
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto', }}>
                 <PrettoSlider defaultValue={age} onChange={(e, v) => this.setState({ age: v })} step={1} min={18} max={75} />
@@ -108,29 +141,29 @@ export default class App extends Component {
                 </div>
                 <div className="iam-text" style={{ marginTop: 0, marginLeft: 4, verticalAlign: 'top', fontSize: 18, lineHeight: '46px', display: 'inline-block' }}>I prefer typing</div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-sizeSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="My Stats" className="header-pic" src={ruler} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">My Stats</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I use</div>
               <div>
                 <div className="cf-button-container" style={{ display: 'inline-block' }}>
-                  <div tabindex="-1" className="cf-mask">
+                  <div tabIndex="-1" className="cf-mask">
                     <div className={imperialMetric === true ? 'cf-green-div-transition-system' : 'cf-green-div-system'}></div>
                   </div>
-                  <button tabindex="0" onClick={this.toggleimperialMetric} className={imperialMetric === true ? 'cf-Imperial-b-transition slid-font' : 'cf-Imperial-b slid-font'} findex="4" kfocus="false">Imperial</button>
-                  <button tabindex="0" onClick={this.toggleimperialMetric} className={imperialMetric === true ? 'cf-Metric-b-transition slid-font' : 'cf-Metric-b slid-font'} findex="5" kfocus="false">Metric</button>
+                  <button tabIndex="0" onClick={this.toggleimperialMetric} className={imperialMetric === true ? 'cf-Imperial-b-transition slid-font' : 'cf-Imperial-b slid-font'} findex="4" kfocus="false">Imperial</button>
+                  <button tabIndex="0" onClick={this.toggleimperialMetric} className={imperialMetric === true ? 'cf-Metric-b-transition slid-font' : 'cf-Metric-b slid-font'} findex="5" kfocus="false">Metric</button>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div>
                 <div className="iam-text">My Height: <font className="cfgreen">{Math.floor(heightInFeet / 12)}</font> feet <font className="cfgreen">{heightInFeet - (Math.floor(heightInFeet / 12) * 12)}</font> inches</div>
                 <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
@@ -145,19 +178,19 @@ export default class App extends Component {
                   <PrettoSlider defaultValue={goalWeightInPounds} onChange={(e, v) => this.setState({ goalWeightInPounds: v })} step={1} min={60} max={550} />
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-activitySection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">What is your</h4>
                   <h4 className="header-sub">estimated body fat?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text-bfp">
                 <span className="bfpspanval"><font className="cfgreen">{bodyFat}</font>%{bodyFat === 50 ? '+' : ''} </span>
                 <div style={{ display: 'inline-block', position: 'relative' }}>
@@ -169,73 +202,49 @@ export default class App extends Component {
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
                 <PrettoSlider defaultValue={bodyFat} onChange={(e, v) => this.setState({ bodyFat: v })} step={1} min={6} max={50} />
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-activitySection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="How active is your job and daily routine?" className="header-pic" src={active} style={{}} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">How active is your</h4>
                   <h4 className="header-sub">job &amp; daily routine?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
-                    <button style={{ width: '100%' }} id="daily_activity0" className="cf-button selected" findex="11" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label-selected">Sedentary</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc-selected">Desk job, work from home{'\n'}Very little activity</div>
-                        </div>
+                  {
+                    activeJobDayRoutine.map((item, index) => (
+                      <div key={index} style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
+                        <button onClick={() => this.selectActiveJobRoutine(index)} style={{ width: '100%' }} id="daily_activity0" className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="11" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
+                            <div className="cf-center-desc">
+                              <div className={item.active === true ? 'cf-button-desc-selected' : 'cf-button-desc'}>{item.description}</div>
+                            </div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
-                    <button style={{ width: '100%' }} id="daily_activity1" className="cf-button" findex="12" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label">Lightly{'\n'}Active</div><div className="cf-center-desc">
-                          <div className="cf-button-desc">Teacher, host, usher{'\n'}Some standing &amp; moving</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
-                    <button style={{ width: '100%' }} id="daily_activity2" className="cf-button" findex="13" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label">Moderately{'\n'}Active</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc">Server, trainer, nurse{'\n'}Mostly standing &amp; moving</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: '5px', width: 'calc(50% - 10px)', display: 'inline-block', }}>
-                    <button style={{ width: '100%' }} id="daily_activity3" className="cf-button" findex="14" kfocus="false">
-                      <div className="cf-button-text-wrapper"><div className="with-desc cf-button-label">Very{'\n'}Active</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc">Construction worker, farmer{'\n'}Mostly moving &amp; lifting</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
+                    ))
+                  }
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-lossSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText"><h4 className="section-header cfblue">How experienced are you</h4>
                   <h4 className="header-sub">with physical fitness?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
@@ -261,7 +270,7 @@ export default class App extends Component {
                   </div>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I work out at...</div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
@@ -281,33 +290,33 @@ export default class App extends Component {
                   </div>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-weightLiftingSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="Weight Lifting Frequency Strength Training Only" className="header-pic" src={weight} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">Weight Lifting Frequency</h4>
                   <h4 className="header-sub-s">(Strength training only)</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div className="iam-text">Days per week: <font className="cfgreen">{daysPerWeek}</font></div>
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div className="iam-text">Days per week: <font className="cfgreen">{liftingDaysPerWeek}</font></div>
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
-                <PrettoSlider defaultValue={daysPerWeek} onChange={(e, v) => this.setState({ daysPerWeek: v })} step={1} min={0} max={7} />
+                <PrettoSlider defaultValue={liftingDaysPerWeek} onChange={(e, v) => this.setState({ liftingDaysPerWeek: v })} step={1} min={0} max={7} />
               </div>
               {
-                daysPerWeek === 0
+                liftingDaysPerWeek === 0
                   ? <div />
                   :
                   <div>
-                    <div className="iam-text">Minutes per day: <font className="cfgreen">{minutesPerDay}</font></div>
+                    <div className="iam-text">Minutes per day: <font className="cfgreen">{liftingMinutesPerDay}</font></div>
                     <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
-                      <PrettoSlider defaultValue={minutesPerDay} onChange={(e, v) => this.setState({ minutesPerDay: v })} step={1} min={1} max={120} />
+                      <PrettoSlider defaultValue={liftingMinutesPerDay} onChange={(e, v) => this.setState({ liftingMinutesPerDay: v })} step={1} min={1} max={120} />
                     </div>
-                    <div tabindex="-1" className="cf-margin"></div>
+                    <div tabIndex="-1" className="cf-margin"></div>
                     <div className="">
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
@@ -354,87 +363,92 @@ export default class App extends Component {
                     </div>
                   </div>
               }
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-cardioSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="Cardio &amp; Group Fitness Combine them if you do both" className="header-pic" src={cardio} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">Cardio &amp; Group Fitness</h4>
                   <h4 className="header-sub-s">(Combine them if you do both)</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div className="iam-text">Days per week: <font className="cfgreen">3</font></div>
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div className="iam-text">Days per week: <font className="cfgreen">{cardioDaysPerWeek}</font></div>
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
-                <PrettoSlider defaultValue={3} step={1} min={0} max={7} />
+                <PrettoSlider defaultValue={cardioDaysPerWeek} onChange={(e, v) => this.setState({ cardioDaysPerWeek: v })} step={1} min={0} max={7} />
               </div>
-              <div>
-                <div className="iam-text">Minutes per day: <font className="cfgreen">60</font></div>
-                <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
-                  <PrettoSlider defaultValue={60} step={1} min={1} max={120} />
-                </div>
-                <div tabindex="-1" className="cf-margin"></div>
-                <div className="">
-                  <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                    <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                      <button style={{ width: '100%' }} id="cardio_level0" className="cf-button selected" findex="28" kfocus="false">
-                        <div className="cf-button-text-wrapper">
-                          <div className="with-desc cf-button-label-selected">Light</div>
-                          <div className="cf-center-desc">
-                            <div className="cf-button-desc-selected">I can hold a conversation</div>
-                          </div>
-                        </div>
-                      </button>
+              {
+                cardioDaysPerWeek === 0
+                  ? <div />
+                  :
+                  <div>
+                    <div className="iam-text">Minutes per day: <font className="cfgreen">{cardioMinutesPerDay}</font></div>
+                    <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
+                      <PrettoSlider defaultValue={cardioMinutesPerDay} onChange={(e, v) => this.setState({ cardioMinutesPerDay: v })} step={1} min={1} max={120} />
                     </div>
-                    <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                      <button style={{ width: '100%' }} id="cardio_level1" className="cf-button" findex="29" kfocus="false">
-                        <div className="cf-button-text-wrapper">
-                          <div className="with-desc cf-button-label">Moderate</div>
-                          <div className="cf-center-desc">
-                            <div className="cf-button-desc">I am breathing hard</div>
-                          </div>
+                    <div tabIndex="-1" className="cf-margin"></div>
+                    <div className="">
+                      <div className="quad-input-container" style={{ margin: '0px auto' }}>
+                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                          <button style={{ width: '100%' }} id="cardio_level0" className="cf-button selected" findex="28" kfocus="false">
+                            <div className="cf-button-text-wrapper">
+                              <div className="with-desc cf-button-label-selected">Light</div>
+                              <div className="cf-center-desc">
+                                <div className="cf-button-desc-selected">I can hold a conversation</div>
+                              </div>
+                            </div>
+                          </button>
                         </div>
-                      </button>
-                    </div>
-                    <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                      <button style={{ width: '100%' }} id="cardio_level2" className="cf-button" findex="30" kfocus="false">
-                        <div className="cf-button-text-wrapper">
-                          <div className="with-desc cf-button-label">Difficult</div>
-                          <div className="cf-center-desc">
-                            <div className="cf-button-desc">Can't talk, busy sweating</div>
-                          </div>
+                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                          <button style={{ width: '100%' }} id="cardio_level1" className="cf-button" findex="29" kfocus="false">
+                            <div className="cf-button-text-wrapper">
+                              <div className="with-desc cf-button-label">Moderate</div>
+                              <div className="cf-center-desc">
+                                <div className="cf-button-desc">I am breathing hard</div>
+                              </div>
+                            </div>
+                          </button>
                         </div>
-                      </button>
-                    </div>
-                    <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                      <button style={{ width: '100%' }} id="cardio_level3" className="cf-button" findex="31" kfocus="false">
-                        <div className="cf-button-text-wrapper">
-                          <div className="with-desc cf-button-label">Intense</div>
-                          <div className="cf-center-desc">
-                            <div className="cf-button-desc">I seriously might die</div>
-                          </div>
+                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                          <button style={{ width: '100%' }} id="cardio_level2" className="cf-button" findex="30" kfocus="false">
+                            <div className="cf-button-text-wrapper">
+                              <div className="with-desc cf-button-label">Difficult</div>
+                              <div className="cf-center-desc">
+                                <div className="cf-button-desc">Can't talk, busy sweating</div>
+                              </div>
+                            </div>
+                          </button>
                         </div>
-                      </button>
+                        <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                          <button style={{ width: '100%' }} id="cardio_level3" className="cf-button" findex="31" kfocus="false">
+                            <div className="cf-button-text-wrapper">
+                              <div className="with-desc cf-button-label">Intense</div>
+                              <div className="cf-center-desc">
+                                <div className="cf-button-desc">I seriously might die</div>
+                              </div>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              }
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="What is your nutritional preference?" className="header-pic" src={plate} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">What is your</h4>
                   <h4 className="header-sub">nutritional preference?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="quad-multi-container" style={{ margin: '0px auto' }}>
                 <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                   <button style={{ width: '100%' }} id="diet" className="cf-button selected" findex="32" kfocus="false">
@@ -486,19 +500,19 @@ export default class App extends Component {
                   </button>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">Medical Diagnosis</h4>
                   <h4 className="header-sub-s">(Only select formal &amp; professional diagnoses)</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="quad-multi-container" style={{ margin: '0px auto' }}>
                 <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                   <button style={{ width: '100%' }} id="conditions" className="cf-button" findex="39" kfocus="false">
@@ -542,18 +556,18 @@ export default class App extends Component {
                     </div>
                   </button>
                 </div></div>
-              <div tabindex="-1" className="cf-margin"></div></div>
+              <div tabIndex="-1" className="cf-margin"></div></div>
             <div className="cf-motivationSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">What motivates</h4>
                   <h4 className="header-sub">you the most?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
@@ -600,19 +614,19 @@ export default class App extends Component {
                   </div>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">What would best help</h4>
                   <h4 className="header-sub">you reach your goals?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
@@ -659,19 +673,19 @@ export default class App extends Component {
                   </div>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-experienceSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <div></div>
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">How experienced are you</h4>
                   <h4 className="header-sub">with tracking macros?</h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
@@ -714,12 +728,13 @@ export default class App extends Component {
                       </div>
                     </button>
                   </div></div></div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
             </div>
-            <div className="cf-whoSection" style={{ width: '100%' }}>
+
+            {/* <div className="cf-whoSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
-              <div tabindex="-1" className="cf-margin"></div>
-              <div tabindex="-1" className="cf-introText">
+              <div tabIndex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-introText">
                 <img alt="Your macros are now delivered via email" className="header-pic" src={packagePic} />
                 <div className="cf-introText">
                   <h4 className="section-header cfblue">Your macros are now</h4>
@@ -728,36 +743,38 @@ export default class App extends Component {
                   </h4>
                 </div>
               </div>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <div className="for-fields">
                 <div>
                   <div>
                     <input step="1" style={{ display: 'inline-block' }} className="cf-text-input-invalid" type="text" pattern="\w*" placeholder="First Name" value="" findex="61" kfocus="false" />
                   </div>
                 </div>
-                <div tabindex="-1" className="cf-margin"></div>
+                <div tabIndex="-1" className="cf-margin"></div>
                 <div>
                   <div>
                     <input step="1" style={{ display: 'inline-block' }} className="cf-text-input-invalid" type="text" pattern="\w*" placeholder="Valid Email Address" value="" findex="62" kfocus="false" />
                   </div>
                 </div>
-                <div tabindex="-1" className="cf-margin"></div>
+                <div tabIndex="-1" className="cf-margin"></div>
                 <div className="check-box-container">
-                  <input id="gdpr" name="gdpr" type="checkbox" className="cf-check-box" style={{ position: 'absolute', verticalAlign: 'top' }} findex="63" kfocus="Halse" />           '     <label tabindex="-1" for="gdpr" className="cf-check-item cf-unticked" style={{ margin: '12px 0px 0px -36px' }}>
+                  <input id="gdpr" name="gdpr" type="checkbox" className="cf-check-box" style={{ position: 'absolute', verticalAlign: 'top' }} findex="63" kfocus="Halse" />
+                  <label tabIndex="-1" htmlFor="gdpr" className="cf-check-item cf-unticked" style={{ margin: '12px 0px 0px -36px' }}>
                     <span className="checkmark"></span>
                   </label>
                   <h4 className="box-desc" style={{ display: 'inline-block', textAlign: 'left' }}>Heck Yes! Email me my macros and other useful information related to my fat loss goals.</h4>
                 </div>
-                <div tabindex="-1" className="cf-margin"></div>
+                <div tabIndex="-1" className="cf-margin"></div>
               </div>
               <button style={{ color: 'rgb(255, 255, 255)', borderRadius: 10, boxShadow: 'rgb(235, 71, 34) 0px 0px 10px', backgroundColor: 'rgb(235, 71, 34)', border: 'medium none' }} id="submit" className="cf-submit" findex="64" kfocus="false">Please Fill Out Missing Info</button>
-              <div tabindex="-1" className="cf-margin"></div>
+              <div tabIndex="-1" className="cf-margin"></div>
               <p className="privacy-policy">Due to the new GDPR law, you must check the box above to proceed. Click <a className="calc-privacy" target="_blank" rel="noopener noreferrer" href="https://iifym.com/privacy-policy" findex="65" kfocus="false">here</a> to view our Privacy Policy, thanks!</p>
               <div className="cf-margin-big"></div>
             </div>
+         */}
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
