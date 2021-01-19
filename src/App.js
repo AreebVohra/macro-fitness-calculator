@@ -54,6 +54,7 @@ export default class App extends Component {
       nutritionalPrefLowCarb: false,
       firstName: '',
       email: '',
+      preferTyping: false,
       recieveEmail: false,
 
       liftingDaysPerWeek: 3,
@@ -266,6 +267,19 @@ export default class App extends Component {
 
   updateInput = (e) => this.setState({ [e.target.id]: e.target.value });
 
+  updateTypingInput = (e) => {
+    let value = parseInt(e.target.value)
+    let max = parseInt(e.target.max)
+
+    if (value > max)
+      this.setState({ [e.target.id]: max });
+    else if (e.target.value === '')
+      this.setState({ [e.target.id]: '' });
+    else
+      this.setState({ [e.target.id]: value });
+
+  }
+
   updateCheckInput = (e) => this.setState({ [e.target.id]: e.target.checked });
 
   ValidateEmail = (inputText) => {
@@ -281,6 +295,7 @@ export default class App extends Component {
     const { liftingDaysPerWeek, liftingMinutesPerDay, strengthLevel, cardioDaysPerWeek, cardioMinutesPerDay, cardioLevel } = this.state;
     const { activeJobDayRoutine, fitnessExperience, fitnessLocation, nutritionalPreference, trackingMacros } = this.state;
     const { motivationPerson, otherMotivation, bestHelptoReachGoal, otherHelp, medicalDiagnosis } = this.state;
+    const { preferTyping } = this.state;
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -312,14 +327,24 @@ export default class App extends Component {
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="iam-text">I am <font className="cfgreen">{age}</font> years young</div>
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto', }}>
-                <PrettoSlider defaultValue={age} onChange={(e, v) => this.setState({ age: v })} step={1} min={18} max={75} />
+                {
+                  preferTyping
+                    ?
+                    <div>
+                      <div>
+                        <input step="1" style={{ display: 'inline-block' }} maxLength={2} max={75} className={(age >= 18 && age <= 75) ? 'cf-text-input-num cf-text-input' : 'cf-text-input-num cf-text-input-invalid'} type="number" pattern="" onInput={this.updateTypingInput} placeholder="Age" id="age" value={age} findex="2" kfocus="false" />
+                        <div className="range-text" style={{ display: 'inline-block', }}>&nbsp;(18 - 75)</div>
+                      </div>
+                    </div>
+                    : <PrettoSlider defaultValue={age} onChange={(e, v) => this.setState({ age: v })} step={1} min={18} max={75} />
+                }
               </div>
               <div style={{ width: 750, maxWidth: '80%', textAlign: 'left', margin: '0px auto', height: 46 }}>
                 <div className="cf-toggle-container" style={{ display: 'inline-block', }}>
                   <div className="cf-toggle-mask">
-                    <div className="cf-toggle-transition-div untoggled"></div>
+                    <div className={preferTyping ? 'cf-toggle-transition-div toggled' : 'cf-toggle-transition-div untoggled'}></div>
                   </div>
-                  <button className="cf-toggle" findex="3" kfocus="false"></button>
+                  <button onClick={() => this.setState({ preferTyping: !preferTyping })} className="cf-toggle" findex="3" kfocus="false"></button>
                 </div>
                 <div className="iam-text" style={{ marginTop: 0, marginLeft: 4, verticalAlign: 'top', fontSize: 18, lineHeight: '46px', display: 'inline-block' }}>I prefer typing</div>
               </div>
@@ -401,7 +426,17 @@ export default class App extends Component {
                 </div>
               </div>
               <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
-                <PrettoSlider defaultValue={bodyFat} onChange={(e, v) => this.setState({ bodyFat: v })} step={1} min={6} max={50} />
+                {
+                  preferTyping
+                    ?
+                    <div>
+                      <div>
+                        <input step="1" style={{ display: 'inline-block' }} maxLength={2} max={50} className={(bodyFat >= 6 && bodyFat <= 50) ? 'cf-text-input-num cf-text-input' : 'cf-text-input-num cf-text-input-invalid'} type="number" pattern="" onInput={this.updateTypingInput} placeholder="BFP" id="bodyFat" value={bodyFat} findex="11" kfocus="false" />
+                        <div className="range-text" style={{ display: 'inline-block' }}>&nbsp;(6 - 50)</div>
+                      </div>
+                    </div>
+                    : <PrettoSlider defaultValue={bodyFat} onChange={(e, v) => this.setState({ bodyFat: v })} step={1} min={6} max={50} />
+                }
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
@@ -614,7 +649,6 @@ export default class App extends Component {
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
-
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -643,7 +677,6 @@ export default class App extends Component {
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
-
             <div className="cf-motivationSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
