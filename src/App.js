@@ -485,7 +485,7 @@ export default class App extends Component {
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
                     fitnessExperience.map((item, index) => (
-                      <div key={index} style={{ margin: 5, width: 'calc(23.3333% - 10px)', display: 'inline-block' }}>
+                      <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                         <button onClick={() => this.selectFitnessExperience(index)} style={{ width: '100%' }} id={'fitnessExperience' + index.toString()} className={item.active ? 'cf-button selected' : 'cf-button'} findex="15" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
@@ -502,7 +502,7 @@ export default class App extends Component {
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
                   {
                     fitnessLocation.map((item, index) => (
-                      <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                      <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                         <button onClick={() => this.selectFitnessLocation(index)} style={{ width: '100%' }} id={'fitnessLocation' + index.toString()} className={item.active ? 'cf-button selected' : 'cf-button'} findex="19" kfocus="false">
                           <div className="cf-button-text-wrapper">
                             <div className={item.active ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
@@ -544,7 +544,7 @@ export default class App extends Component {
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         {
                           strengthLevel.map((item, index) => (
-                            <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                            <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                               <button onClick={() => this.selectStrengthLevel(index)} style={{ width: '100%' }} id={'strengthLevel' + index.toString()} className={item.active ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
                                 <div className="cf-button-text-wrapper">
                                   <div className={item.active ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
@@ -591,7 +591,7 @@ export default class App extends Component {
                       <div className="quad-input-container" style={{ margin: '0px auto' }}>
                         {
                           cardioLevel.map((item, index) => (
-                            <div key={index} style={{ margin: 5, width: 'calc(35% - 10px)', display: 'inline-block' }}>
+                            <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
                               <button onClick={() => this.selectCardioLevel(index)} style={{ width: '100%' }} id={'cardioLevel' + index.toString()} className={item.active ? 'cf-button selected' : 'cf-button'} findex="23" kfocus="false">
                                 <div className="cf-button-text-wrapper">
                                   <div className={item.active ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>

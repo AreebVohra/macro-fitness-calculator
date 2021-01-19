@@ -1760,7 +1760,7 @@ button:focus {
 @media (min-width: 768px) {
   .active-job-day-routine {
     margin: 5px;
-    width: calc(35% - 10px);
+    width: calc(50% - 10px);
     display: inline-block;
   }
 }
