@@ -8,7 +8,7 @@ import active from './assets/images/active-people.png';
 import cardio from './assets/images/cardio-people.png';
 import weight from './assets/images/weights-pic.png';
 import plate from './assets/images/diet-plate.png';
-// import packagePic from './assets/images/package-pic.png';
+import packagePic from './assets/images/package-pic.png';
 
 const PrettoSlider = withStyles({
   root: {
@@ -52,6 +52,9 @@ export default class App extends Component {
       gender: false,
       imperialMetric: false,
       nutritionalPrefLowCarb: false,
+      firstName: '',
+      email: '',
+      recieveEmail: false,
 
       liftingDaysPerWeek: 3,
       liftingMinutesPerDay: 60,
@@ -119,7 +122,14 @@ export default class App extends Component {
         { label: 'none', active: true },
         { label: 'Others', active: false },
       ],
-      otherHelp: ''
+      otherHelp: '',
+
+      trackingMacros: [
+        { label: 'Total Noob', description: 'I\'ve never tracked macros and barely understand the concept', active: true },
+        { label: 'Semi Aware', description: 'I know about macros but have never been successful tracking', active: false },
+        { label: 'Moderate', description: 'I\'ve tracked macros with some success, but struggle with it', active: false },
+        { label: 'Total Pro', description: 'I\'ve been tracking macros for a while and can teach others too', active: false }
+      ]
     }
   }
 
@@ -196,18 +206,31 @@ export default class App extends Component {
     await this.setState({ bestHelptoReachGoal: a })
   }
 
+  selectTrackingMacros = async (index) => {
+    let a = this.state.trackingMacros;
+    a[0]['active'] = false; a[1]['active'] = false;
+    a[2]['active'] = false; a[3]['active'] = false;
+    a[index]['active'] = true;
+    await this.setState({ trackingMacros: a })
+  }
+
   updateInput = (e) => this.setState({ [e.target.id]: e.target.value });
+
+  updateCheckInput = (e) => this.setState({ [e.target.id]: e.target.checked });
+
+  ValidateEmail = (inputText) => {
+    var mailformat = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    if (inputText.match(mailformat)) return 'cf-text-input';
+    else return 'cf-text-input-invalid';
+  }
 
   render() {
     const { heightInFeet, currentWeightInPounds, goalWeightInPounds } = this.state;
     const { heightInCM, currentWeightInKg, goalWeightInKg } = this.state;
-    const { age, gender, imperialMetric, bodyFat, nutritionalPrefLowCarb } = this.state;
+    const { age, gender, imperialMetric, bodyFat, nutritionalPrefLowCarb, firstName, email, recieveEmail } = this.state;
     const { liftingDaysPerWeek, liftingMinutesPerDay, strengthLevel, cardioDaysPerWeek, cardioMinutesPerDay, cardioLevel } = this.state;
-    const { activeJobDayRoutine, fitnessExperience, fitnessLocation, nutritionalPreference } = this.state;
+    const { activeJobDayRoutine, fitnessExperience, fitnessLocation, nutritionalPreference, trackingMacros } = this.state;
     const { motivationPerson, otherMotivation, bestHelptoReachGoal, otherHelp } = this.state;
-    // console.log('====================================');
-    // console.log(this.state.otherMotivation);
-    // console.log('====================================');
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -628,7 +651,7 @@ export default class App extends Component {
                     <div>
                       <div>
                         <input
-                          step="1" value="" findex="57" kfocus="false"
+                          step="1" findex="57" kfocus="false"
                           type="text" pattern="\w*"
                           style={{ display: 'inline-block' }}
                           className={otherMotivation === '' ? 'cf-text-input-invalid' : 'cf-text-input'}
@@ -673,23 +696,14 @@ export default class App extends Component {
                     <div tabIndex="-1" className="cf-margin"></div>
                     <div>
                       <div>
-                        <input
-                          step="1" findex="57" kfocus="false"
-                          type="text" pattern="\w*"
-                          style={{ display: 'inline-block' }}
-                          className={otherHelp === '' ? 'cf-text-input-invalid' : 'cf-text-input'}
-                          placeholder="What would help the most?"
-                          onInput={this.updateInput}
-                          id="otherHelp"
-                          value={otherHelp}
-                        />
+                        <input step="1" style={{ display: 'inline-block' }} className={otherHelp === '' ? 'cf-text-input-invalid' : 'cf-text-input'} type="text" pattern="\w*" placeholder="What would help the most?" onInput={this.updateInput} id="otherHelp" value={otherHelp} findex="57" kfocus="false" />
                       </div>
                     </div></span>
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
-        
+
             <div className="cf-experienceSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -703,50 +717,27 @@ export default class App extends Component {
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="experience0" className="cf-button selected" findex="57" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label-selected">Total Noob</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc-selected">I've never tracked macros and barely understand the concept</div>
-                        </div>
+                  {
+                    trackingMacros.map((item, index) => (
+                      <div key={index} style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
+                        <button onClick={() => this.selectTrackingMacros(index)} style={{ width: '100%' }} id={'experience' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="57" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'with-desc cf-button-label-selected' : 'with-desc cf-button-label'}>{item.label}</div>
+                            <div className="cf-center-desc">
+                              <div className={item.active === true ? 'cf-button-desc-selected' : 'cf-button-desc'}>{item.description}</div>
+                            </div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="experience1" className="cf-button" findex="58" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label">Semi Aware</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc">I know about macros but have never been successful tracking</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="experience2" className="cf-button" findex="59" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label">Moderate</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc">I've tracked macros with some success, but struggle with it</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(50% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="experience3" className="cf-button" findex="60" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="with-desc cf-button-label">Total Pro</div>
-                        <div className="cf-center-desc">
-                          <div className="cf-button-desc">I've been tracking macros for a while and can teach others too</div>
-                        </div>
-                      </div>
-                    </button>
-                  </div></div></div>
+                    ))
+                  }
+                </div>
+              </div>
+
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
 
-            {/* <div className="cf-whoSection" style={{ width: '100%' }}>
+            <div className="cf-whoSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
               <div tabIndex="-1" className="cf-introText">
@@ -762,34 +753,38 @@ export default class App extends Component {
               <div className="for-fields">
                 <div>
                   <div>
-                    <input step="1" style={{ display: 'inline-block' }} className="cf-text-input-invalid" type="text" pattern="\w*" placeholder="First Name" value="" findex="61" kfocus="false" />
+                    <input step="1" style={{ display: 'inline-block' }} className={firstName === '' ? 'cf-text-input-invalid' : 'cf-text-input'} type="text" pattern="\w*" placeholder="First Name" id="firstName" onInput={this.updateInput} value={firstName} findex="61" kfocus="false" />
                   </div>
                 </div>
                 <div tabIndex="-1" className="cf-margin"></div>
                 <div>
                   <div>
-                    <input step="1" style={{ display: 'inline-block' }} className="cf-text-input-invalid" type="text" pattern="\w*" placeholder="Valid Email Address" value="" findex="62" kfocus="false" />
+                    <input step="1" style={{ display: 'inline-block' }} className={this.ValidateEmail(email)} type="email" placeholder="Valid Email Address" id="email" onInput={this.updateInput} value={email} findex="62" kfocus="false" />
                   </div>
                 </div>
                 <div tabIndex="-1" className="cf-margin"></div>
                 <div className="check-box-container">
-                  <input id="gdpr" name="gdpr" type="checkbox" className="cf-check-box" style={{ position: 'absolute', verticalAlign: 'top' }} findex="63" kfocus="Halse" />
-                  <label tabIndex="-1" htmlFor="gdpr" className="cf-check-item cf-unticked" style={{ margin: '12px 0px 0px -36px' }}>
+                  <input id="recieveEmail" name="recieveEmail" onChange={this.updateCheckInput} checked={recieveEmail} type="checkbox" className="cf-check-box" style={{ position: 'absolute', verticalAlign: 'top' }} findex="63" kfocus="Halse" />
+                  <label tabIndex="-1" htmlFor="recieveEmail" className={recieveEmail ? 'cf-check-item cf-ticked' : 'cf-check-item cf-unticked'} style={{ margin: '12px 0px 0px -36px' }}>
                     <span className="checkmark"></span>
                   </label>
                   <h4 className="box-desc" style={{ display: 'inline-block', textAlign: 'left' }}>Heck Yes! Email me my macros and other useful information related to my fat loss goals.</h4>
                 </div>
                 <div tabIndex="-1" className="cf-margin"></div>
               </div>
-              <button style={{ color: 'rgb(255, 255, 255)', borderRadius: 10, boxShadow: 'rgb(235, 71, 34) 0px 0px 10px', backgroundColor: 'rgb(235, 71, 34)', border: 'medium none' }} id="submit" className="cf-submit" findex="64" kfocus="false">Please Fill Out Missing Info</button>
+              {
+                (recieveEmail && this.ValidateEmail(email) === 'cf-text-input' && firstName)
+                  ? <button style={{ color: 'rgb(255, 255, 255)', borderRadius: 10, boxShadow: 'rgb(155, 205, 45) 0px 0px 10px', backgroundColor: 'rgb(155, 205, 45)', border: 'medium none' }} id="submit" className="cf-submit" findex="64" kfocus="false">Show Me My Macros &amp;{'\n'} Email Me A Special Offer</button>
+                  : <button style={{ color: 'rgb(255, 255, 255)', borderRadius: 10, boxShadow: 'rgb(235, 71, 34) 0px 0px 10px', backgroundColor: 'rgb(235, 71, 34)', border: 'medium none' }} id="submit" className="cf-submit" findex="64" kfocus="false">Please Fill Out{'\n'} Missing Info</button>
+              }
               <div tabIndex="-1" className="cf-margin"></div>
-              <p className="privacy-policy">Due to the new GDPR law, you must check the box above to proceed. Click <a className="calc-privacy" target="_blank" rel="noopener noreferrer" href="https://iifym.com/privacy-policy" findex="65" kfocus="false">here</a> to view our Privacy Policy, thanks!</p>
+              <p className="privacy-policy">Due to the new GDPR law, you must check the box above to proceed. Click <a className="calc-privacy" rel="noopener noreferrer" href="" findex="65" kfocus="false">here</a> to view our Privacy Policy, thanks!</p>
               <div className="cf-margin-big"></div>
             </div>
-         */}
+
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
