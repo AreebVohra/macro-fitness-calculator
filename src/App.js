@@ -8,7 +8,7 @@ import active from './assets/images/active-people.png';
 import cardio from './assets/images/cardio-people.png';
 import weight from './assets/images/weights-pic.png';
 import plate from './assets/images/diet-plate.png';
-import packagePic from './assets/images/package-pic.png';
+// import packagePic from './assets/images/package-pic.png';
 
 const PrettoSlider = withStyles({
   root: {
@@ -47,10 +47,12 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gender: false,
-      imperialMetric: false,
       age: 45,
       bodyFat: 28,
+      gender: false,
+      imperialMetric: false,
+      nutritionalPrefLowCarb: false,
+
       liftingDaysPerWeek: 3,
       liftingMinutesPerDay: 60,
       cardioDaysPerWeek: 3,
@@ -59,6 +61,10 @@ export default class App extends Component {
       heightInFeet: 66,
       currentWeightInPounds: 305,
       goalWeightInPounds: 305,
+
+      heightInCM: 165,
+      currentWeightInKg: 140,
+      goalWeightInKg: 140,
 
       activeJobDayRoutine: [
         { label: 'sedentary', description: 'Desk job, work from home\nVery little activity', active: true },
@@ -95,7 +101,25 @@ export default class App extends Component {
         { label: 'Pollotarian', active: false },
         { label: 'Pesce-Pollotarian', active: false },
       ],
-      nutritionalPrefLowCarb: false
+      motivationPerson: [
+        { label: 'My Family', active: false },
+        { label: 'My Friends', active: false },
+        { label: 'I have always been\nself-motivated', active: false },
+        { label: 'My desire\nto change', active: false },
+        { label: 'I\'m not very\nmotivated yet', active: true },
+        { label: 'Others', active: false },
+      ],
+      otherMotivation: '',
+
+      bestHelptoReachGoal: [
+        { label: 'Step-by-Step Instructions', active: false },
+        { label: 'Meal plans & Recipes', active: false },
+        { label: 'Macro Coaching', active: false },
+        { label: '30 Minute Consultation', active: false },
+        { label: 'none', active: true },
+        { label: 'Others', active: false },
+      ],
+      otherHelp: ''
     }
   }
 
@@ -154,8 +178,36 @@ export default class App extends Component {
     await this.setState({ nutritionalPreference: a })
   }
 
+  selectMotivationPerson = async (index) => {
+    let a = this.state.motivationPerson;
+    a[0]['active'] = false; a[1]['active'] = false; a[2]['active'] = false;
+    a[3]['active'] = false; a[4]['active'] = false; a[5]['active'] = false;
+    a[index]['active'] = true;
+
+    await this.setState({ nutritionalPreference: a })
+  }
+
+  selectBestHelp = async (index) => {
+    let a = this.state.bestHelptoReachGoal;
+    a[0]['active'] = false; a[1]['active'] = false; a[2]['active'] = false;
+    a[3]['active'] = false; a[4]['active'] = false; a[5]['active'] = false;
+    a[index]['active'] = true;
+
+    await this.setState({ bestHelptoReachGoal: a })
+  }
+
+  updateInput = (e) => this.setState({ [e.target.id]: e.target.value });
+
   render() {
-    const { heightInFeet, currentWeightInPounds, gender, age, imperialMetric, goalWeightInPounds, bodyFat, liftingDaysPerWeek, liftingMinutesPerDay, cardioDaysPerWeek, cardioMinutesPerDay, activeJobDayRoutine, fitnessExperience, fitnessLocation, strengthLevel, cardioLevel, nutritionalPreference, nutritionalPrefLowCarb } = this.state;
+    const { heightInFeet, currentWeightInPounds, goalWeightInPounds } = this.state;
+    const { heightInCM, currentWeightInKg, goalWeightInKg } = this.state;
+    const { age, gender, imperialMetric, bodyFat, nutritionalPrefLowCarb } = this.state;
+    const { liftingDaysPerWeek, liftingMinutesPerDay, strengthLevel, cardioDaysPerWeek, cardioMinutesPerDay, cardioLevel } = this.state;
+    const { activeJobDayRoutine, fitnessExperience, fitnessLocation, nutritionalPreference } = this.state;
+    const { motivationPerson, otherMotivation, bestHelptoReachGoal, otherHelp } = this.state;
+    // console.log('====================================');
+    // console.log(this.state.otherMotivation);
+    // console.log('====================================');
     return (
       <div id="calc_container">
         <div className="CalcContainer" style={{ boxSizing: 'border-box', display: 'flex', }}>
@@ -221,7 +273,25 @@ export default class App extends Component {
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
-              <div>
+
+              {/* Imperial  */}
+              <div style={{ display: imperialMetric === true ? '' : 'none' }}>
+                <div className="iam-text">My Height: <font className="cfgreen">{heightInCM}</font>{heightInCM === 210 ? '+' : ''} cm</div>
+                <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
+                  <PrettoSlider defaultValue={heightInCM} onChange={(e, v) => this.setState({ heightInCM: v })} step={1} min={120} max={210} />
+                </div>
+                <div className="iam-text">Current Weight: <font className="cfgreen">{currentWeightInKg}</font>{currentWeightInKg === 250 ? '+' : ''} kg</div>
+                <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
+                  <PrettoSlider defaultValue={currentWeightInKg} onChange={(e, v) => this.setState({ currentWeightInKg: v })} step={1} min={30} max={250} />
+                </div>
+                <div className="iam-text">Goal Weight: <font className="cfgreen">{goalWeightInKg}</font>{goalWeightInKg === 250 ? '+' : ''} kg</div>
+                <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
+                  <PrettoSlider defaultValue={goalWeightInKg} onChange={(e, v) => this.setState({ goalWeightInKg: v })} step={1} min={30} max={250} />
+                </div>
+              </div>
+
+              {/* Metric  */}
+              <div style={{ display: imperialMetric === true ? 'none' : '' }}>
                 <div className="iam-text">My Height: <font className="cfgreen">{Math.floor(heightInFeet / 12)}</font> feet <font className="cfgreen">{heightInFeet - (Math.floor(heightInFeet / 12) * 12)}</font> inches</div>
                 <div className="slider-container" style={{ width: 750, maxWidth: '80%', margin: '0px auto' }}>
                   <PrettoSlider defaultValue={heightInFeet} onChange={(e, v) => this.setState({ heightInFeet: v })} step={1} min={48} max={83} />
@@ -235,6 +305,7 @@ export default class App extends Component {
                   <PrettoSlider defaultValue={goalWeightInPounds} onChange={(e, v) => this.setState({ goalWeightInPounds: v })} step={1} min={60} max={550} />
                 </div>
               </div>
+
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
             <div className="cf-activitySection" style={{ width: '100%' }}>
@@ -470,6 +541,7 @@ export default class App extends Component {
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
+
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -524,7 +596,9 @@ export default class App extends Component {
                     </div>
                   </button>
                 </div></div>
-              <div tabIndex="-1" className="cf-margin"></div></div>
+              <div tabIndex="-1" className="cf-margin"></div>
+            </div>
+
             <div className="cf-motivationSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -538,52 +612,39 @@ export default class App extends Component {
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation0" className="cf-button" findex="45" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">My Family</div>
+                  {
+                    motivationPerson.map((item, index) => (
+                      <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
+                        <button onClick={() => this.selectMotivationPerson(index)} style={{ width: '100%' }} id={'motivation' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="45" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation1" className="cf-button" findex="46" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">My Friends</div>
+                    ))
+                  }
+                  <span style={{ display: motivationPerson[5]['active'] === true ? '' : 'none' }}>
+                    <div tabIndex="-1" className="cf-margin"></div>
+                    <div>
+                      <div>
+                        <input
+                          step="1" value="" findex="57" kfocus="false"
+                          type="text" pattern="\w*"
+                          style={{ display: 'inline-block' }}
+                          className={otherMotivation === '' ? 'cf-text-input-invalid' : 'cf-text-input'}
+                          placeholder="What motivates you the most?"
+                          onInput={this.updateInput}
+                          id="otherMotivation"
+                          value={otherMotivation}
+                        />
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation2" className="cf-button" findex="47" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">I Have Always Been{'\n'}Self-Motivated</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation3" className="cf-button" findex="48" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">My Desire To Change</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation4" className="cf-button selected" findex="49" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label-selected">I'm Not Very Motivated Yet</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="motivation5" className="cf-button" findex="50" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Other</div>
-                      </div>
-                    </button>
-                  </div>
+                    </div>
+                  </span>
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
+
             <div className="cf-dietSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -597,52 +658,38 @@ export default class App extends Component {
               <div tabIndex="-1" className="cf-margin"></div>
               <div className="">
                 <div className="quad-input-container" style={{ margin: '0px auto' }}>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help0" className="cf-button" findex="51" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Step-by-Step Instructions</div>
+                  {
+                    bestHelptoReachGoal.map((item, index) => (
+                      <div key={index} style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
+                        <button onClick={() => this.selectBestHelp(index)} style={{ width: '100%' }} id={'help' + index.toString()} className={item.active === true ? 'cf-button selected' : 'cf-button'} findex="51" kfocus="false">
+                          <div className="cf-button-text-wrapper">
+                            <div className={item.active === true ? 'cf-button-label-selected' : 'cf-button-label'}>{item.label}</div>
+                          </div>
+                        </button>
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help1" className="cf-button" findex="52" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Meal plans &amp; Recipes</div>
+                    ))
+                  }
+                  <span style={{ display: bestHelptoReachGoal[5]['active'] === true ? '' : 'none' }}>
+                    <div tabIndex="-1" className="cf-margin"></div>
+                    <div>
+                      <div>
+                        <input
+                          step="1" findex="57" kfocus="false"
+                          type="text" pattern="\w*"
+                          style={{ display: 'inline-block' }}
+                          className={otherHelp === '' ? 'cf-text-input-invalid' : 'cf-text-input'}
+                          placeholder="What would help the most?"
+                          onInput={this.updateInput}
+                          id="otherHelp"
+                          value={otherHelp}
+                        />
                       </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help2" className="cf-button" findex="53" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Macro Coaching</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help3" className="cf-button" findex="54" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">30 Minute Consultation</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help4" className="cf-button selected" findex="55" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label-selected">None</div>
-                      </div>
-                    </button>
-                  </div>
-                  <div style={{ margin: 5, width: 'calc(33.3333% - 10px)', display: 'inline-block' }}>
-                    <button style={{ width: '100%' }} id="help5" className="cf-button" findex="56" kfocus="false">
-                      <div className="cf-button-text-wrapper">
-                        <div className="cf-button-label">Other</div>
-                      </div>
-                    </button>
-                  </div>
+                    </div></span>
                 </div>
               </div>
               <div tabIndex="-1" className="cf-margin"></div>
             </div>
+        
             <div className="cf-experienceSection" style={{ width: '100%' }}>
               <div className="gradient" style={{ border: 'medium none', zIndex: -10, position: 'absolute', width: '100%', maxWidth: '100%' }}></div>
               <div tabIndex="-1" className="cf-margin"></div>
@@ -742,7 +789,7 @@ export default class App extends Component {
          */}
           </div>
         </div>
-      </div>
+      </div >
     );
   }
 }

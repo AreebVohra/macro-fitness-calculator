@@ -1699,16 +1699,16 @@ h4.box-desc {
 }
 
 .quad-input-container {
-  width: 50vw;
-  width: 70vw
+  width: "50vw";
+  width: "70vw"
 }
 
 .quad-multi-container {
-  width: 50vw
+  width: "50vw"
 }
 
 .quad-multi-shape {
-  width: 16.67vw
+  width: '16.67vw'
 }
 
 input.cf-text-input:-webkit-autofill, input.cf-text-input:-webkit-autofill:active, input.cf-text-input:-webkit-autofill:focus, input.cf-text-input:-webkit-autofill:hover {
